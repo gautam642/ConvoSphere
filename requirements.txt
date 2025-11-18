@@ -1,0 +1,7 @@
+google-genai>=0.3.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+tweepy>=4.14.0
+telethon>=1.28.0
+firecrawl>=0.0.8
+dotenv>=1.0.0
