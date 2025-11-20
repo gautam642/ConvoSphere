@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "client_phone": "+919971083829",
+    "client_name": "gautam_manu",
+    "client_details": "dfasfgsdf",
+    "start_timestamp": "20251121_022637"
+  },
+  "generated": [],
+  "past": [],
+  "messages": [
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hii",
+      "timestamp": 1763672206.4168198
+    }
+  ]
+}

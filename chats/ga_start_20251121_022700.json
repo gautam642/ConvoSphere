@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "client_phone": "99710838290",
+    "client_name": "ga",
+    "client_details": "dfsd",
+    "start_timestamp": "20251121_022700"
+  },
+  "generated": [],
+  "past": [],
+  "messages": [
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "dfsdfsdfs",
+      "timestamp": 1763672228.3048234
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "fdsfd",
+      "timestamp": 1763672230.6060457
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "client_phone": "+919971083829",
+    "client_name": "gautam_manu",
+    "client_details": "he is a good boy",
+    "start_timestamp": "20251121_021922"
+  },
+  "generated": [],
+  "past": [],
+  "messages": [
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hi",
+      "timestamp": 1763671780.1313102
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hii",
+      "timestamp": 1763671841.987802
+    }
+  ]
+}

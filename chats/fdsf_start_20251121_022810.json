@@ -1,0 +1,78 @@
+{
+  "metadata": {
+    "client_phone": "fsdd",
+    "client_name": "fdsf",
+    "client_details": "fdfsf",
+    "start_timestamp": "20251121_022810"
+  },
+  "generated": [],
+  "past": [],
+  "messages": [
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hi",
+      "timestamp": 1763672302.908985
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hi",
+      "timestamp": 1763672303.7590246
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hi",
+      "timestamp": 1763672304.3973324
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hi",
+      "timestamp": 1763672305.0192034
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hih",
+      "timestamp": 1763672305.545435
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "ih",
+      "timestamp": 1763672305.9936883
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "ih",
+      "timestamp": 1763672306.369311
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "i",
+      "timestamp": 1763672306.9883256
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hi",
+      "timestamp": 1763672307.1600652
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "ih",
+      "timestamp": 1763672307.326322
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "i",
+      "timestamp": 1763672307.522326
+    }
+  ]
+}

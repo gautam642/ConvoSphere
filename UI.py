@@ -4,6 +4,7 @@ import json
 import os
 import time
 import html
+from pathlib import Path
 
 import streamlit as st
 from dotenv import load_dotenv
@@ -28,8 +29,17 @@ st.set_page_config(
 )
 
 
+CHAT_DIR = Path("chats")
+CHAT_DIR.mkdir(exist_ok=True)
+
 # Initialize Redis connection
 redis_facil = RedisFacil()
+
+# Global layout tweak: reduce top padding of main container
+st.markdown(
+    "<style>.block-container {padding-top: 0.75rem;}</style>",
+    unsafe_allow_html=True,
+)
 
 # Set org ID and API key
 # genai.configure(api_key=os.getenv("GREMINI_API_KEY"))
@@ -57,22 +67,95 @@ def run_redis_async(coro):
         print(f"Redis operation failed: {e}")
         raise
 
+def get_chat_file_path(chat_id: str) -> Path:
+    return CHAT_DIR / f"{chat_id}.json"
+
+
+def load_existing_chats() -> dict:
+    chats: dict[str, dict] = {}
+    if not CHAT_DIR.exists():
+        return chats
+    for file in CHAT_DIR.glob("*.json"):
+        try:
+            with file.open("r", encoding="utf-8") as f:
+                data = json.load(f)
+            chat_id = file.stem
+            # Ensure required keys
+            data.setdefault("generated", [])
+            data.setdefault("past", [])
+            data.setdefault("messages", [])
+            chats[chat_id] = data
+        except Exception:
+            continue
+    return chats
+
+
+def save_chat(chat_id: str) -> None:
+    if 'chat_sessions' not in st.session_state:
+        return
+    data = st.session_state['chat_sessions'].get(chat_id)
+    if not data:
+        return
+    path = get_chat_file_path(chat_id)
+    try:
+        with path.open("w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+
+
 # Initialise session state variables
 if 'chat_sessions' not in st.session_state:
-    st.session_state['chat_sessions'] = {}
+    st.session_state['chat_sessions'] = load_existing_chats()
 if 'current_chat_id' not in st.session_state:
-    st.session_state['current_chat_id'] = "default_chat"
+    st.session_state['current_chat_id'] = ""
 
-# Initialize current chat session if it doesn't exist
-if st.session_state['current_chat_id'] not in st.session_state['chat_sessions']:
-    st.session_state['chat_sessions'][st.session_state['current_chat_id']] = {
-        'generated': [],
-        'past': [],
-        'messages': [
-            {"role": "user", "parts": ["You are a helpful assistant."]},
-            {"role": "model", "parts": ["How can I help you today?"]}
-        ],
-    }
+# Client/session metadata
+if 'client_phone' not in st.session_state:
+    st.session_state['client_phone'] = ""
+if 'client_name' not in st.session_state:
+    st.session_state['client_name'] = ""
+if 'client_details' not in st.session_state:
+    st.session_state['client_details'] = ""
+
+
+def ensure_current_chat() -> None:
+    if not st.session_state['current_chat_id']:
+        # When no chat selected, start a new one based on client info
+        ts = time.strftime("%Y%m%d_%H%M%S")
+        base = st.session_state.get('client_name') or "client"
+        chat_id = f"{base}_start_{ts}"
+        st.session_state['current_chat_id'] = chat_id
+        st.session_state['chat_sessions'][chat_id] = {
+            'metadata': {
+                'client_phone': st.session_state['client_phone'],
+                'client_name': st.session_state['client_name'],
+                'client_details': st.session_state['client_details'],
+                'start_timestamp': ts,
+            },
+            'generated': [],
+            'past': [],
+            'messages': [],
+        }
+        save_chat(chat_id)
+
+
+# Startup prompt for client info (shown once)
+if not st.session_state['client_name']:
+    st.sidebar.markdown("### Session Setup")
+    with st.sidebar.form(key="client_info_form"):
+        phone = st.text_input("phone no.:", value=st.session_state['client_phone'])
+        name = st.text_input("name of client:", value=st.session_state['client_name'])
+        details = st.text_area("client details aware of:", value=st.session_state['client_details'], height=80)
+        ok = st.form_submit_button("Start Chat")
+    if not ok:
+        st.stop()
+    st.session_state['client_phone'] = phone.strip()
+    st.session_state['client_name'] = name.strip() or "client"
+    st.session_state['client_details'] = details.strip()
+
+# Ensure there is a current chat (new one by default)
+ensure_current_chat()
 
 # Alias current chat session for easier access
 current_chat = st.session_state['chat_sessions'][st.session_state['current_chat_id']]
@@ -82,7 +165,6 @@ if 'tg_messages' not in st.session_state:
     st.session_state['tg_messages'] = []
 
 REDIS_TOPIC = "telegram_chat"
-redis_facil = RedisFacil()
 
 # Function to check for new messages
 def check_new_messages(max_retries: int = 3) -> bool:
@@ -117,13 +199,24 @@ def check_new_messages(max_retries: int = 3) -> bool:
                         if any(m.get("message_id") == msg_id for m in st.session_state['tg_messages']):
                             continue
                             
+                    ts_msg = time.time()
                     st.session_state['tg_messages'].append({
                         "role": "peer",
                         "sender": sender_name,
                         "text": text,
                         "message_id": msg_id,
-                        "timestamp": time.time()
+                        "timestamp": ts_msg,
                     })
+                    # Also log to persistent chat history
+                    current_chat['messages'].append({
+                        "source": "telegram_client",
+                        "direction": "incoming",
+                        "text": text,
+                        "sender": sender_name,
+                        "message_id": msg_id,
+                        "timestamp": ts_msg,
+                    })
+                save_chat(st.session_state['current_chat_id'])
                 return True
             return False
             
@@ -138,33 +231,30 @@ def check_new_messages(max_retries: int = 3) -> bool:
 # Check for new messages
 check_new_messages()    
 
-# Sidebar - chat session management for Gemini chat
+# Sidebar - chat session management for chats stored on disk
 st.sidebar.title("Chat Controls")
 st.sidebar.subheader("Chat Sessions")
 chat_names = list(st.session_state['chat_sessions'].keys())
-selected_chat_name = st.sidebar.selectbox("Select a chat:", chat_names, key="chat_selector_unique")
+if not chat_names:
+    chat_names = [st.session_state['current_chat_id']]
+selected_chat_name = st.sidebar.selectbox(
+    "Select a chat:",
+    chat_names,
+    index=chat_names.index(st.session_state['current_chat_id']),
+    key="chat_selector_unique",
+)
 
 if selected_chat_name != st.session_state['current_chat_id']:
     st.session_state['current_chat_id'] = selected_chat_name
-    st.rerun()
+    current_chat = st.session_state['chat_sessions'][selected_chat_name]
 
-new_chat_name = st.sidebar.text_input("New chat name:", key="new_chat_input_unique")
-if st.sidebar.button("Create New Chat", key="create_chat_btn_unique"):
-    if new_chat_name and new_chat_name not in st.session_state['chat_sessions']:
-        st.session_state['chat_sessions'][new_chat_name] = {
-            'generated': [],
-            'past': [],
-            'messages': [
-                {"role": "user", "parts": ["You are a helpful assistant."]},
-                {"role": "model", "parts": ["How can I help you today?"]}
-            ],
-        }
-        st.session_state['current_chat_id'] = new_chat_name
-        st.rerun()
-    elif new_chat_name:
-        st.sidebar.warning("Chat name already exists!")
-    else:
-        st.sidebar.warning("Please enter a chat name.")
+# Start New Chat: reset client info so the 3-field setup form appears again
+if st.sidebar.button("Start New Chat", key="create_chat_btn_unique"):
+    st.session_state['client_phone'] = ""
+    st.session_state['client_name'] = ""
+    st.session_state['client_details'] = ""
+    st.session_state['current_chat_id'] = ""
+    # st.experimental_rerun()
 
 
 # generate a response using Gemini (right pane)
@@ -193,6 +283,9 @@ def generate_response(prompt):
     # Add assistant response to current chat session
     current_chat['messages'].append({"role": "model", "parts": [response]})
 
+    # Persist updated chat
+    save_chat(st.session_state['current_chat_id'])
+
     return response
 
 
@@ -200,10 +293,11 @@ def generate_response(prompt):
 left_col, right_col = st.columns([1, 1])
 
 with left_col:
-    # Column header styled like a top bar
+    # Column header styled like a top bar (reduced top margin)
+    client_title = st.session_state.get('client_name') or "TELEGRAM CHAT"
     st.markdown(
-        "<div style='text-align:center; font-weight:600; font-size:1.1rem; "
-        "padding:0.5rem 0; border-bottom:1px solid #333;'>TELEGRAM CHAT</div>",
+        f"<div style='margin-top:0.5rem; text-align:center; font-weight:600; font-size:1.05rem; "
+        f"padding:0.25rem 0; border-bottom:1px solid #333;'>{html.escape(client_title)} - TELEGRAM CHAT</div>",
         unsafe_allow_html=True,
     )
 
@@ -260,15 +354,24 @@ with left_col:
                     "sender": "You",
                     "text": tg_input,
                 })
+                # Log to current chat messages for persistence
+                current_chat['messages'].append({
+                    "source": "telegram_ui",
+                    "direction": "outgoing",
+                    "text": tg_input,
+                    "timestamp": time.time(),
+                })
+                save_chat(st.session_state['current_chat_id'])
                 st.rerun()
             except Exception as e:
                 st.error(f"Failed to send message: {e}")
 
 with right_col:
-    # Column header styled like a top bar
+    # Column header styled like a top bar (reduced top margin)
+    client_title = st.session_state.get('client_name') or "CONVOSPHERE"
     st.markdown(
-        "<div style='text-align:center; font-weight:600; font-size:1.1rem; "
-        "padding:0.5rem 0; border-bottom:1px solid #333;'>CONVOSPHERE</div>",
+        f"<div style='margin-top:0.5rem; text-align:center; font-weight:600; font-size:1.05rem; "
+        f"padding:0.25rem 0; border-bottom:1px solid #333;'>{html.escape(client_title)} - CONVOSPHERE</div>",
         unsafe_allow_html=True,
     )
 
@@ -321,4 +424,18 @@ with right_col:
             output = generate_response(user_input)
             current_chat['past'].append(user_input)
             current_chat['generated'].append(output)
+            # Log user + model messages in metadata log for JSON persistence
+            current_chat['messages'].append({
+                "source": "convosphere_ui",
+                "direction": "outgoing",
+                "text": user_input,
+                "timestamp": time.time(),
+            })
+            current_chat['messages'].append({
+                "source": "convosphere_model",
+                "direction": "incoming",
+                "text": output,
+                "timestamp": time.time(),
+            })
+            save_chat(st.session_state['current_chat_id'])
 

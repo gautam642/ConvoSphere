@@ -1,0 +1,32 @@
+{
+  "metadata": {
+    "client_phone": "+919971083829",
+    "client_name": "gautam_manu",
+    "client_details": "denege",
+    "start_timestamp": "20251121_022214"
+  },
+  "generated": [],
+  "past": [],
+  "messages": [
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hi gani daddy",
+      "timestamp": 1763671955.7765698
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hi daddy",
+      "timestamp": 1763671987.357613
+    },
+    {
+      "source": "telegram_client",
+      "direction": "incoming",
+      "text": "hi baby",
+      "sender": "Ganesh",
+      "message_id": 17794,
+      "timestamp": 1763671992.2613354
+    }
+  ]
+}
