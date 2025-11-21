@@ -7,5 +7,12 @@
   },
   "generated": [],
   "past": [],
-  "messages": []
+  "messages": [
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hiiii",
+      "timestamp": 1763764716.450499
+    }
+  ]
 }

@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "client_phone": "+91997108fe",
+    "client_name": "fgfdfgdfg",
+    "client_details": "gfdgd",
+    "start_timestamp": "20251121_105736"
+  },
+  "generated": [],
+  "past": [],
+  "messages": [
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "hi",
+      "timestamp": 1763702864.1386888
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "denge",
+      "timestamp": 1763702909.4389708
+    },
+    {
+      "source": "telegram_client",
+      "direction": "incoming",
+      "text": "hajsn",
+      "sender": "Ganesh",
+      "timestamp": 1763702933.1962821
+    },
+    {
+      "source": "telegram_ui",
+      "direction": "outgoing",
+      "text": "guuhij",
+      "timestamp": 1763702938.4048207
+    },
+    {
+      "source": "telegram_client",
+      "direction": "incoming",
+      "text": "hdjdnd",
+      "sender": "Ganesh",
+      "timestamp": 1763702942.199052
+    }
+  ]
+}
