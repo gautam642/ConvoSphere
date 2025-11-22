@@ -12,6 +12,7 @@ const Sidebar: React.FC<Props> = ({ chats, activeChatId, onSelectChat, onCreateC
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
   const [details, setDetails] = useState('');
+  const [goal, setGoal] = useState('');
   const [creating, setCreating] = useState(false);
   const [showNew, setShowNew] = useState(false);
 
@@ -23,6 +24,7 @@ const Sidebar: React.FC<Props> = ({ chats, activeChatId, onSelectChat, onCreateC
       setPhone('');
       setName('');
       setDetails('');
+      setGoal('');
     } finally {
       setCreating(false);
     }
@@ -106,10 +108,10 @@ const Sidebar: React.FC<Props> = ({ chats, activeChatId, onSelectChat, onCreateC
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <label
               style={{
-                fontSize: '0.8rem',
+                fontSize: '0.85rem',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '0.2rem',
+                gap: '0.35rem',
                 color: '#9ca3af',
               }}
             >
@@ -117,23 +119,25 @@ const Sidebar: React.FC<Props> = ({ chats, activeChatId, onSelectChat, onCreateC
               <input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                placeholder="+1234567890"
                 style={{
                   width: '100%',
-                  marginTop: 2,
-                  padding: '0.5rem 0.65rem',
+                  padding: '0.65rem 0.75rem',
                   borderRadius: 8,
-                  border: '1px solid #2a2f3d',
+                  border: '1px solid #ffffff',
                   background: '#0d1117',
                   color: '#ffffff',
+                  fontSize: '0.9rem',
+                  outline: 'none',
                 }}
               />
             </label>
             <label
               style={{
-                fontSize: '0.8rem',
+                fontSize: '0.85rem',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '0.2rem',
+                gap: '0.35rem',
                 color: '#9ca3af',
               }}
             >
@@ -141,23 +145,25 @@ const Sidebar: React.FC<Props> = ({ chats, activeChatId, onSelectChat, onCreateC
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                placeholder="John Doe"
                 style={{
                   width: '100%',
-                  marginTop: 2,
-                  padding: '0.5rem 0.65rem',
+                  padding: '0.65rem 0.75rem',
                   borderRadius: 8,
-                  border: '1px solid #2a2f3d',
+                  border: '1px solid #ffffff',
                   background: '#0d1117',
                   color: '#ffffff',
+                  fontSize: '0.9rem',
+                  outline: 'none',
                 }}
               />
             </label>
             <label
               style={{
-                fontSize: '0.8rem',
+                fontSize: '0.85rem',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '0.2rem',
+                gap: '0.35rem',
                 color: '#9ca3af',
               }}
             >
@@ -166,15 +172,44 @@ const Sidebar: React.FC<Props> = ({ chats, activeChatId, onSelectChat, onCreateC
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
                 rows={3}
+                placeholder="Background, interests, previous conversations..."
                 style={{
                   width: '100%',
-                  marginTop: 2,
-                  padding: '0.5rem 0.65rem',
+                  padding: '0.65rem 0.75rem',
                   borderRadius: 8,
-                  border: '1px solid #2a2f3d',
+                  border: '1px solid #ffffff',
                   background: '#0d1117',
                   color: '#ffffff',
+                  fontSize: '0.9rem',
                   resize: 'vertical',
+                  outline: 'none',
+                  fontFamily: 'inherit',
+                }}
+              />
+            </label>
+            <label
+              style={{
+                fontSize: '0.85rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.35rem',
+                color: '#9ca3af',
+              }}
+            >
+              goal:
+              <input
+                value={goal}
+                onChange={(e) => setGoal(e.target.value)}
+                placeholder="Close deal, schedule meeting, etc."
+                style={{
+                  width: '100%',
+                  padding: '0.65rem 0.75rem',
+                  borderRadius: 8,
+                  border: '1px solid #ffffff',
+                  background: '#0d1117',
+                  color: '#ffffff',
+                  fontSize: '0.9rem',
+                  outline: 'none',
                 }}
               />
             </label>
@@ -182,15 +217,16 @@ const Sidebar: React.FC<Props> = ({ chats, activeChatId, onSelectChat, onCreateC
               type="submit"
               disabled={creating}
               style={{
-                marginTop: 8,
-                padding: '0.5rem 0.8rem',
+                marginTop: '0.5rem',
+                padding: '0.7rem 1rem',
                 borderRadius: 8,
                 border: 'none',
                 background: '#0ea5e9',
                 color: '#ffffff',
-                fontSize: '0.9rem',
+                fontSize: '0.95rem',
                 fontWeight: 600,
-                cursor: 'pointer',
+                cursor: creating ? 'not-allowed' : 'pointer',
+                opacity: creating ? 0.7 : 1,
               }}
             >
               {creating ? 'Creating...' : 'Start Chat'}
