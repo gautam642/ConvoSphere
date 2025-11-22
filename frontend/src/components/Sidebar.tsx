@@ -13,6 +13,7 @@ const Sidebar: React.FC<Props> = ({ chats, activeChatId, onSelectChat, onCreateC
   const [name, setName] = useState('');
   const [details, setDetails] = useState('');
   const [creating, setCreating] = useState(false);
+  const [showNew, setShowNew] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -28,110 +29,278 @@ const Sidebar: React.FC<Props> = ({ chats, activeChatId, onSelectChat, onCreateC
   }
 
   return (
-    <div style={{
-      width: 280,
-      background: '#020617',
-      borderRight: '1px solid #1f2937',
-      padding: '1rem 0.75rem',
-      boxSizing: 'border-box',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '1rem',
-    }}>
+    <div
+      style={{
+        width: 320,
+        background: '#0d1117',
+        borderRight: '1px solid #1e2530',
+        padding: '1rem 0.5rem',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.5rem',
+      }}
+    >
       <div
         style={{
-          padding: '0.75rem',
-          borderRadius: 8,
-          background: '#030712',
-          border: '1px solid #1f2937',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0.5rem 0.75rem',
+          marginBottom: '0.5rem',
         }}
       >
-        <div style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.75rem' }}>Session Setup</div>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <label style={{ fontSize: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.2rem', color: '#9ca3af' }}>
-            phone no.:
-            <input
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-              style={{ width: '100%', marginTop: 2, padding: '0.25rem 0.4rem', borderRadius: 4, border: '1px solid #1f2937', background: '#020617', color: '#e5e7eb' }}
-            />
-          </label>
-          <label style={{ fontSize: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.2rem', color: '#9ca3af' }}>
-            name of client:
-            <input
-              value={name}
-              onChange={e => setName(e.target.value)}
-              style={{ width: '100%', marginTop: 2, padding: '0.25rem 0.4rem', borderRadius: 4, border: '1px solid #1f2937', background: '#020617', color: '#e5e7eb' }}
-            />
-          </label>
-          <label style={{ fontSize: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.2rem', color: '#9ca3af' }}>
-            client details aware of:
-            <textarea
-              value={details}
-              onChange={e => setDetails(e.target.value)}
-              rows={3}
-              style={{ width: '100%', marginTop: 2, padding: '0.25rem 0.4rem', borderRadius: 4, border: '1px solid #1f2937', background: '#020617', color: '#e5e7eb', resize: 'vertical' }}
-            />
-          </label>
+        <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ffffff' }}>Chats</div>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
           <button
-            type="submit"
-            disabled={creating}
+            type="button"
             style={{
-              marginTop: 6,
-              padding: '0.4rem 0.6rem',
-              borderRadius: 6,
+              width: 32,
+              height: 32,
+              borderRadius: 8,
               border: 'none',
-              background: '#3b82f6',
-              color: '#e5e7eb',
-              fontSize: '0.9rem',
-              fontWeight: 500,
+              background: '#1e2530',
+              color: '#9ca3af',
+              fontSize: '1rem',
               cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            {creating ? 'Creating...' : 'Start Chat'}
+            🔍
           </button>
-        </form>
+          <button
+            type="button"
+            onClick={() => setShowNew((v) => !v)}
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 8,
+              border: 'none',
+              background: showNew ? '#0ea5e9' : '#1e2530',
+              color: '#ffffff',
+              fontSize: '1.1rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            ✏️
+          </button>
+        </div>
       </div>
+
+      {showNew && (
+        <div
+          style={{
+            padding: '0.75rem',
+            borderRadius: 12,
+            background: '#1a1d29',
+            border: '1px solid #2a2f3d',
+            margin: '0 0.5rem 0.5rem',
+          }}
+        >
+          <div style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: '0.5rem', color: '#ffffff' }}>Start a new chat</div>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <label
+              style={{
+                fontSize: '0.8rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.2rem',
+                color: '#9ca3af',
+              }}
+            >
+              phone no.:
+              <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                style={{
+                  width: '100%',
+                  marginTop: 2,
+                  padding: '0.5rem 0.65rem',
+                  borderRadius: 8,
+                  border: '1px solid #2a2f3d',
+                  background: '#0d1117',
+                  color: '#ffffff',
+                }}
+              />
+            </label>
+            <label
+              style={{
+                fontSize: '0.8rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.2rem',
+                color: '#9ca3af',
+              }}
+            >
+              name of client:
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                style={{
+                  width: '100%',
+                  marginTop: 2,
+                  padding: '0.5rem 0.65rem',
+                  borderRadius: 8,
+                  border: '1px solid #2a2f3d',
+                  background: '#0d1117',
+                  color: '#ffffff',
+                }}
+              />
+            </label>
+            <label
+              style={{
+                fontSize: '0.8rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.2rem',
+                color: '#9ca3af',
+              }}
+            >
+              client details aware of:
+              <textarea
+                value={details}
+                onChange={(e) => setDetails(e.target.value)}
+                rows={3}
+                style={{
+                  width: '100%',
+                  marginTop: 2,
+                  padding: '0.5rem 0.65rem',
+                  borderRadius: 8,
+                  border: '1px solid #2a2f3d',
+                  background: '#0d1117',
+                  color: '#ffffff',
+                  resize: 'vertical',
+                }}
+              />
+            </label>
+            <button
+              type="submit"
+              disabled={creating}
+              style={{
+                marginTop: 8,
+                padding: '0.5rem 0.8rem',
+                borderRadius: 8,
+                border: 'none',
+                background: '#0ea5e9',
+                color: '#ffffff',
+                fontSize: '0.9rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              {creating ? 'Creating...' : 'Start Chat'}
+            </button>
+          </form>
+        </div>
+      )}
 
       <div
         style={{
-          padding: '0.75rem',
-          borderRadius: 8,
-          background: '#030712',
-          border: '1px solid #1f2937',
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 0,
+          overflowY: 'auto',
         }}
       >
-        <div style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '0.5rem' }}>Chat Sessions</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: '40vh', overflowY: 'auto' }}>
-          {chats.map(chat => {
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
+          {chats.map((chat, idx) => {
             const label = chat.metadata.client_name || chat.id;
             const active = chat.id === activeChatId;
+            const time = new Date(chat.metadata.start_timestamp || Date.now()).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            const preview = 'Last message preview...';
             return (
               <button
                 key={chat.id}
                 onClick={() => onSelectChat(chat.id)}
                 style={{
                   textAlign: 'left',
-                  padding: '0.4rem 0.5rem',
-                  borderRadius: 6,
+                  padding: '0.75rem',
+                  borderRadius: 0,
                   border: 'none',
-                  background: active ? '#1d4ed8' : '#020617',
-                  color: active ? '#e5e7eb' : '#d1d5db',
-                  fontSize: '0.85rem',
+                  background: active ? '#1a1d29' : 'transparent',
+                  color: '#ffffff',
+                  fontSize: '0.9rem',
                   cursor: 'pointer',
-                  borderLeft: active ? '3px solid #60a5fa' : '3px solid transparent',
                   display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
+                  alignItems: 'flex-start',
+                  gap: 12,
+                  position: 'relative',
                 }}
               >
-                <span style={{ fontSize: '0.65rem', color: active ? '#bfdbfe' : '#6b7280' }}>●</span>
-                <span>{label}</span>
+                <div
+                  style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: '50%',
+                    background: `hsl(${idx * 60}, 65%, 55%)`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    color: '#ffffff',
+                    flexShrink: 0,
+                  }}
+                >
+                  {label.slice(0, 2).toUpperCase()}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                    <div style={{ fontWeight: 600, fontSize: '0.95rem', color: '#ffffff' }}>{label}</div>
+                    <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{time}</div>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: '0.85rem',
+                      color: '#9ca3af',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {preview}
+                  </div>
+                </div>
+                {idx < 3 && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 12,
+                      right: 12,
+                      background: '#0ea5e9',
+                      color: '#ffffff',
+                      borderRadius: '999px',
+                      width: 20,
+                      height: 20,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.7rem',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {idx + 1}
+                  </div>
+                )}
               </button>
             );
           })}
           {chats.length === 0 && (
-            <div style={{ fontSize: '0.85rem', color: '#6b7280' }}>No chats yet. Create one above.</div>
+            <div style={{ fontSize: '0.85rem', color: '#6b7280', padding: '1rem 0.75rem', textAlign: 'center' }}>
+              No chats yet. Click the ✏️ button to start one.
+            </div>
           )}
         </div>
       </div>
