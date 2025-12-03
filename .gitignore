@@ -1,0 +1,38 @@
+*.pyc
+__pycache__/
+.env
+*.log
+*.pyo
+*.pyd
+*.egg-info/
+
+# Virtualenvs
+venv/
+.venv/
+myvenv/
+
+# Local data/output artifacts
+*.session
+*.session-journal
+tg_user_session.session*
+osint_result_*.json
+test_result.json
+profiles_by_url.json
+profiles_by_url_*.json
+llm_analysis_result.json
+serpapi_output.json
+
+# Binaries/large tools
+phoneinfoga
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+frontend/node_modules/
+*node_modules/
+
+
+*.txt
+debug_api.txt
