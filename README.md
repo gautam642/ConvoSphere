@@ -24,7 +24,44 @@ Typical use case: a salesperson starts a session for a new prospect, enters know
 
 ---
 
-## 2. Key Capabilities
+## 2. UI Walkthrough & Screenshots
+
+All screenshots live in the `images/` folder.
+
+### 2.1 Starting a Session
+<p align="center">
+  <img src="images/entry.png" alt="Entry Form" width="85%" />
+</p>
+
+- Start a new conversation by entering name, phone, context, and goal.
+
+### 2.2 Conversation Workspace & Gemini Strategic Advice
+
+<p align="center">
+  <img src="images/afterlogin.png" alt="Conversation Workspace" width="85%" />
+  <img src="images/afterlogin_gemini.png" alt="Workspace with Gemini Panel" width="85%" />
+  <!-- <img src="images/query_gemini_answer.png" alt="Gemini Strategic Advice" width="32%" /> -->
+</p>
+
+- Left: sessions and navigation.
+- Center: Telegram-style chat.
+- Right: togglable Gemini and OSINT panes, with Gemini strategic advice alongside the conversation.
+
+### 2.3 OSINT Intelligence
+
+<p align="center">
+  <img src="images/osint1.png" alt="OSINT View 1" width="24%" />
+  <img src="images/osint2.png" alt="OSINT View 2" width="24%" />
+  <img src="images/osint3.png" alt="OSINT View 3" width="24%" />
+  <img src="images/osint4.png" alt="OSINT View 4" width="24%" />
+</p>
+
+- Detailed person and company profile built from aggregated OSINT.
+- Talking points, risks, and opportunities for the salesperson.
+
+---
+
+## 3. Key Capabilities
 
 - **OSINT Enrichment Pipeline** (implemented in `orchestrator.py` + `tool_wrappers.py`):
   - Phone validation with **Numverify**.
@@ -241,46 +278,8 @@ Implemented in `api.py` (see `schemas.py` for request/response models):
 - `POST /webhook/telegram` – Placeholder webhook receiver for Telegram inbound messages.
 - `WS /ws/{session_id}` – WebSocket for live session updates (messages, OSINT, LLM, Gemini).
 
----
 
-## 8. UI Walkthrough & Screenshots
-
-All screenshots live in the `images/` folder.
-
-### 8.1 Starting a Session
-
-![Entry Form](images/entry.png)
-
-- Start a new conversation by entering name, phone, context, and goal.
-
-### 8.2 Conversation Workspace
-
-![After Login](images/afterlogin.png)
-![After Login – Gemini Panel](images/afterlogin_gemini.png)
-
-- Left: sessions and navigation.
-- Center: Telegram-style chat.
-- Right: togglable Gemini and OSINT panes.
-
-### 8.3 OSINT Intelligence
-
-![OSINT View 1](images/osint1.png)
-![OSINT View 2](images/osint2.png)
-![OSINT View 3](images/osint3.png)
-![OSINT View 4](images/osint4.png)
-
-- Detailed person and company profile built from aggregated OSINT.
-- Talking points, risks, and opportunities for the salesperson.
-
-### 8.4 Gemini Strategic Advice
-
-![Gemini Answer](images/query_gemini_answer.png)
-
-- Structured JSON from Gemini turned into human-readable coaching in the UI.
-
----
-
-## 9. Testing & Development
+## 8. Testing & Development
 
 - Core tests live in `tests/` and top-level `test_*.py` files.
 - To run tests:
