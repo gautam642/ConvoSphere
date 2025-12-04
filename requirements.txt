@@ -1,0 +1,14 @@
+google-genai>=0.3.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+tweepy>=4.14.0
+telethon>=1.28.0
+firecrawl>=0.0.8
+pymongo>=4.6.1
+redis>=5.0.1
+fastapi>=0.104.1
+uvicorn>=0.24.0
+motor>=3.3.2
+pytest>=7.4.3
+httpx>=0.25.1
+ollama>=0.2.0

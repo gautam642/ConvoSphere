@@ -18,7 +18,7 @@ tg_user_session.session*
 osint_result_*.json
 test_result.json
 profiles_by_url.json
-profiles_by_url_*.json
+profiles_by_url*.json
 llm_analysis_result.json
 serpapi_output.json
 
@@ -34,5 +34,6 @@ frontend/node_modules/
 *node_modules/
 
 
-*.txt
+# *.txt
 debug_api.txt
+debug_error.txt
